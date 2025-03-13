@@ -1,115 +1,127 @@
- 
-# High-Resolution Land Use and Land Cover (LULC) Dataset Calculator for Regional Climate Modeling 
-
+# High-Resolution Land Use and Land Cover (LULC) Dataset Calculator for Regional Climate Modeling
 
 This Python program generates high-resolution land use and land cover (LULC) datasets for regional climate modeling across both historical and future periods. The original project was developed in Fortran by Peter Hoffmann (see: [ESSD, 2023](https://essd.copernicus.org/articles/15/3819/2023/)). By integrating this LULC data, climate models can more accurately simulate the impacts of land use changes on regional climate dynamics.
 
 ## Installation Guide
 
-1. **Change to the project directory**:
-
+1. **Change to the project directory:**
+   
    ```bash
    cd project_name
-
-2. **Install the required libraries**:
-
+   ```
+   
+2. **Install the required libraries:**
+   
    ```bash
-   conda env create -f environment.yml 
+   conda env create -f environment.yml
+   ```
 
-3. **Activate your environment**:
+3. **Activate your environment:**
+   
    ```bash
    conda activate land_use_translator_env
+   ```
 
-## Quick start (Example historical scenario 1950-2015 for Germany)
+## Quick Start (Example: Historical Scenario 1950-2015 for Germany)
 
-To get started with this project, follow these steps:
-
-1. **Change to the projects data directory**:
-
+1. **Change to the project's data directory:**
+   
    ```bash
    cd land_use_and_land_cover_change/data/
    ```
+   
 2. **Download required data files using `wget`:**
-
+   
    ```bash
    wget --continue --progress=bar --no-check-certificate \
     "https://luh.umd.edu/LUH2/LUH2_v2h/transitions.nc" \
     "https://luh.umd.edu/LUH2/LUH2_v2h/states.nc" \
     "https://luh.umd.edu/LUH2/LUH2_v2h/management.nc" \
-    "https://zenodo.org/records/14981619/files/CROB_reg01_Global.nc?download=1&preview=1" \
-    "https://zenodo.org/records/14981619/files/FORB_reg01_Global.nc?download=1&preview=1" \
-    "https://zenodo.org/records/14981619/files/GRAB_reg01_Global.nc?download=1&preview=1" \
-    "https://zenodo.org/records/14981619/files/SHRB_reg01_Global.nc?download=1&preview=1" \
-    "https://zenodo.org/records/14981619/files/URBB_reg01_Global.nc?download=1&preview=1" \
-    "https://zenodo.org/records/14981619/files/PFTS_reg01.nc?download=1&preview=1"
+    "https://zenodo.org/records/14981619/files/CROB_reg01_Global.nc?download=1" \
+    "https://zenodo.org/records/14981619/files/FORB_reg01_Global.nc?download=1" \
+    "https://zenodo.org/records/14981619/files/GRAB_reg01_Global.nc?download=1" \
+    "https://zenodo.org/records/14981619/files/SHRB_reg01_Global.nc?download=1" \
+    "https://zenodo.org/records/14981619/files/URBB_reg01_Global.nc?download=1" \
+    "https://zenodo.org/records/14981619/files/PFTS_reg01.nc?download=1"
    ```
-These files will be downloaded and save in `data` directory.
+   
+   These files will be downloaded and saved in the `data` directory.
 
 3. **Run the program from the project directory:**
-
-```bash
-python3 main.py
-```
-
-5. **Output file:** The generated output file will be located in the  `data/LUCAS_LUC/` directory. This output file contains the Plant Functional Type (PFT) fraction for the 16 NPFTs across the selected region, scenario, and timeline.
+   
+   ```bash
+   python3 main.py
+   ```
+   
+4. **Output File:**
+   - The generated output file will be located in the `data/LUCAS_LUC/` directory.
+   - It contains the Plant Functional Type (PFT) fraction for the 16 NPFTs across the selected region, scenario, and timeline.
 
 ## Dataset Requirements
 
-The following datasets are required to run the program:
+### **Required Datasets:**
 
-- **Land Use (LU) Transitions**: LU changes for the selected time period (will be filtered in case of providing larger datasets). The following files can be downloaded from the [LUH Data Portal](https://luh.umd.edu/data.shtml) for different scenarios (historical, historical_high, etc):
-   - transitions.nc: The land-use transitions are the annual changes between land-use states. 
-   - states.nc: The land-use states are the fractions of each grid-cell occupied by various land-uses in a given year.
-   - management.nc: Contains irrigation data; this file is only required if irrigation is enabled (i.e., if `irri` is set to True).
-   - add_tree_cover.nc: Tree cover data; this file is only required if if addtree is enabled (i.e., if `addtree` is set to True).
+- **Land Use (LU) Transitions:**
+  - Downloadable from the [LUH Data Portal](https://luh.umd.edu/data.shtml).
+  - Files needed:
+    - `transitions.nc`: Annual land-use transitions.
+    - `states.nc`: Land-use states (fractions of each grid cell).
+    - `management.nc`: Irrigation data (only required if `irri = True`).
+    - `add_tree_cover.nc`: Tree cover data (only required if `addtree = True`).
 
-These files should be then moved to `land_use_and_land_cover_change/data/`.
-- **Landmate PFTs Maps**: Contains data for 16 Plant Functional Types (PFTs), providing detailed vegetation characterization. The data for Europe can be downloaded from [WDC Climate](https://www.wdc-climate.de/ui/entry?acronym=LM_PFT_EUR_v1.1_afts). **From [WDC Climate](https://www.wdc-climate.de/ui/entry?acronym=LM_PFT_EUR_v1.1_afts).** you can download the .nc file for Europe (you will have to log in first). This file should be then moved to `land_use_and_land_cover_change/data/` and rename it as `PFTS_reg01.nc`. 
+- **Landmate PFT Maps:**
+  - Provides vegetation characterization with 16 Plant Functional Types (PFTs).
+  - Available from [WDC Climate](https://www.wdc-climate.de/ui/entry?acronym=LM_PFT_EUR_v1.1_afts).
+  - Rename the downloaded file as `PFTS_reg01.nc` and move it to `land_use_and_land_cover_change/data/`.
 
-- **Mcgrath Data (Optional)**: For the backward extension of historical forest type distribution, additional information on the relative distribution of broadleaf and needleleaf forests, derived from the McGrath dataset, can be utilized. For more information about obtaining this dataset, please contact the maintainers of this project.
-- **Sea-Land Mask (Optional)**: 
-   - By default, the sea-land mask will be calculated from the Landmate PFT maps based on land classification.
-   - If you want to use a custom sea-land mask, you can provide the path to the file via the `path_file_lsm` parameter in the configuration file.
-- **Background Data (Optional)**: In certain cases, where a certain vegetation type is not present within a grid cell but should be increased according to the LUH2 and the rules provided by the LUT, a background map of potential vegetation is needed.
-   - The project already provides global background data. This data can be used to enhance the simulation (i.e. set `backgrd` to True). If you prefer to use your own regional or global background data, you can specify the path to the new data files via `path_file_back*` and `path_file_back*_global` parameters.
+### **Optional Datasets:**
 
-By default, the datasets should be located in a designated `data/` directory. If different storage locations are prefered, alternative paths for each dataset can be specified in a configuration file. This will be further detailed in the Usage section bellow.
+- **McGrath Data:**
+  - Used for historical forest type distribution.
+  - Contact the project maintainers for access.
 
- 
+- **Sea-Land Mask:**
+  - Default: Calculated from Landmate PFT maps.
+  - Custom masks can be specified using `path_file_lsm` in the configuration file.
+
+- **Background Data:**
+  - Used when vegetation types are missing but required by LUH2 rules.
+  - Default global dataset provided, but custom datasets can be specified.
 
 ## Configuration
-The main configuration file is located at `config/main.yaml`. Modify the parameters in this file to customize the program:
 
-#### LUT configuration
-   - (`region`): Choose from pre-configured regions ("Germany", "Europe", "WestAfrica", "NorthAmerica", "Australasia"), or add a new region by providing the necessary grid files (located into `scripts/`) and coordinates (`coords`parameter).
-   - (`forward`): **True** for future simulation or **False** for historical simulation.
-   - (`backgrd`): True/False. Optionally include background data.
-   - (`mcgrath`): True/False for using mcgrath data in the LUT. 
-   - (`addtree`): True/False for using addtree data in the LUT. 
-   - (`irri`): True/False. Enable or disable irrigation data, if the irrigation dataset is available.
-   - (`syear`)/(`eyear`): Specify the time period for LU calculations by setting the starting year (`syear`) and ending year (`eyear`).
-   - (`mcgrath_eyear`): end year of mcgrath file (in case that its different from eyear).
-   - (`npfts`): number of npfts used in the LUT.
-   - (`xsize`): xsize of the region.
-   - (`ysize`): ysize of the region. 
+The main configuration file is located at `config/main.yaml`. Modify these parameters to customize the program:
 
+### **LUT Configuration**
 
-   ### LUH2 prepare data configuration
-   - `prepare_luh2_data`: True/False. Files preparation for the LUT by extracting required data from the given transitions and landmate-pft-maps files.
-   - `prepare_mcgrath`: True/False. Preparation of Mcgrath data (Optional) for the LUT by extracting required data from given mcgrath file.
-   - `remap`: remapping method used for extracting data in the preparation data section (**bilinear** or **con2**).
-   - `scenario`: choose scenario name ("historical", "historical_high", "historical_low", "rcp19", "rcp26", "rcp34", "rcp45", "rcp60", "rcp70", "rcp85").
-   - `grid`: choose the resolution in degrees.
-   - `coords`(Optional): add custom coordinates for the selected region.
-   ### Sea-Land Mask configuration
-   By default, the sea-land mask will be calculated from the Landmate PFT maps based on land classification. However, if you want to use a custom sea-land mask, you can specify its file path:
-   - (`path_file_lsm`): Specify the path to the sea-land mask file if you prefer to use a custom one.
-   - (`rcm_lsm_var`): variable name in the RCM LSM file in case of having specified another file in `path_file_lsm`.
-   ### Background Data configuration
-   The project already includes global background data by default, which will be used unless you specify an alternative:
-   - (`path_file_back*`): path to a custom background dataset.
-   ### Optional file paths
-   - (`path_file_*`): Specify file path for the used files. In case of not specifying default locations will be checked by the programm. 
+- `region`: Pre-configured regions: "Germany", "Europe", "WestAfrica", "NorthAmerica", "Australasia". Custom regions can be added.
+- `forward`: **True** for future simulation, **False** for historical.
+- `backgrd`: **True/False** (Include background data).
+- `mcgrath`: **True/False** (Use McGrath data in LUT).
+- `addtree`: **True/False** (Include additional tree cover data).
+- `irri`: **True/False** (Enable irrigation data if available).
+- `syear` / `eyear`: Specify the time range.
+- `npfts`: Number of NPFTs in the LUT.
+- `xsize` / `ysize`: Define region dimensions.
 
+### **LUH2 Data Preparation**
 
- 
+- `prepare_luh2_data`: **True/False** (Extract required LUH2 data).
+- `prepare_mcgrath`: **True/False** (Prepare McGrath data, if available).
+- `remap`: Choose remapping method (**bilinear** or **con2**).
+- `scenario`: Options: "historical", "historical_high", "historical_low", "rcp19", "rcp26", "rcp34", "rcp45", "rcp60", "rcp70", "rcp85".
+- `grid`: Select resolution (degrees).
+- `coords`: Custom coordinates (optional).
+
+### **Sea-Land Mask Configuration**
+
+- `path_file_lsm`: Path to a custom sea-land mask file (if applicable).
+- `rcm_lsm_var`: Variable name in the RCM LSM file.
+
+### **Background Data Configuration**
+
+- `path_file_back*`: Path to a custom background dataset.
+
+### **Optional File Paths**
+
+- `path_file_*`: Specify custom paths for input files. If not set, default locations will be used.
