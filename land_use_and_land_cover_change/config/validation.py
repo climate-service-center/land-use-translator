@@ -47,6 +47,7 @@ schema = {
     "path_file_backcro" : {"type": "string", "nullable": True},
     "path_file_lsm" : {"type": "string", "nullable": True},
     "coords": {"type": "string", "nullable": True},
+    "coords_lc_in": {"type": "string", "nullable": True},
 }
 
 
@@ -68,13 +69,14 @@ def validate_config(config):
             raise ValueError("Mcgrath year (mcgrath_eyear) must be equal or smaller than ending year (eyear)")
         if config.mcgrath_eyear < config.syear:
             raise ValueError("Mcgrath year (mcgrath_eyear) must be equal or bigger than starting year (syear)")
-    if config.coords:
-        if len(config.coords.split(",")) != 4:
-            raise ValueError("Coordinates must given as 4 values (lonmin,lonmax,latmin,latmax) separated by commas")
-        try:
-            [float(config.coords.split(",")[i]) for i in range(4)]
-        except ValueError:
-            raise ValueError("Coordinates must be given as float values")
+    for crds in [config.coords, config.coords_lc_in]:
+        if crds:
+            if len(crds.split(",")) != 4:
+                raise ValueError("Coordinates must given as 4 values (lonmin,lonmax,latmin,latmax) separated by commas")
+            try:
+                [float(crds.split(",")[i]) for i in range(4)]
+            except ValueError:
+                raise ValueError("Coordinates must be given as float values")
 
 def validate_pfts_file(namelist, config):
     ds = xr.open_dataset(f"{namelist['F_LC_IN_REG'].replace('.nc','_tmp.nc')}")
