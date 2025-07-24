@@ -922,7 +922,7 @@ class LUT:
                     else:
                         cdo.add(input=f"-chname,{IRR[n]},irrig_frac -selvar,{IRR[n]} {path_region}/dummy.nc {path_region}/sum_irri_frac_{self.syear}_{self.eyear}_{self.grid}.nc", output=f"{path_region}/dummy2.nc")
                         os.rename(f"{path_region}/dummy2.nc", f"{path_region}/sum_irri_frac_{self.syear}_{self.eyear}_{self.grid}.nc")
-                    # os.remove(f"{path_region}/dummy.nc")
+                    os.remove(f"{path_region}/dummy.nc")
                 cdo.div(input=f"{path_region}/sum_irri_frac_{self.syear}_{self.eyear}_{self.grid}.nc {path_region}/sum_crop_frac.nc", output=f"{path_region}/{self.grid}/irrigation_{self.syear}_{self.eyear}_{self.grid}_2.nc")
                 cdo.setmisstoc("-999", input=f"{path_region}/{self.grid}/irrigation_{self.syear}_{self.eyear}_{self.grid}_2.nc", output=f"{path_region}/{self.grid}/irrigation_{self.syear}_{self.eyear}_{self.grid}.nc")
 
@@ -962,25 +962,6 @@ class LUT:
         """
         Prepare the PFTS data for the given grid
         """
-        # if self.grid == "reg025_Europe":
-        #     ext="NINT"
-        #     remap_com="invertlat"
-        #     cutting=''
-        # else:
-        #     if self.remap == "bilinear":
-        #         ext="BIL"
-        #         remap_com=f"remapbil"
-        #         if self.grid == "EUR-011":
-        #             cutting = "-selindexbox,2,434,2,434"
-        #         else:
-        #             cutting = ""
-        #     elif self.remap == "con2":
-        #         ext = "CON2"
-        #         remap_com = f"remapcon2"
-        #         if self.grid == 'EUR-011':
-        #             cutting = "-selindexbox,2,434,2,434"
-        #         else:
-        #             cutting = ''
         # prepare PFTS
         print_section_heading(f"Selecting variables for PFTS")
         input_file = self.namelist["F_LC_IN"]
