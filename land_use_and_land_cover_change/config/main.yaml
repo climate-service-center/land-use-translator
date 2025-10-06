@@ -20,7 +20,8 @@ prepare_mcgrath: False # prepare mcgrath data
 remap : "bilinear" # remapping method ("bilinear", "con2")
 scenario : "historical" # scenario name ("historical", "historical_high", "historical_low", "rcp19", "rcp26", "rcp34", "rcp45","rcp60", "rcp70", "rcp85")
 grid : 0.1 # resolution in degrees
-coords : null # region coordinates like "6,15.5,46.4,55.45" (lonmin,lonmax,latmin,latmax)
+coords : null        # region coordinates like "6,15.5,46.4,55.45" (lonmin,lonmax,latmin,latmax) (the CRS of the netCDFs) (except the PFTs)
+coords_lc_in: null  # coordinates of the same region in the CRS of the PFT file, if different 
 
 # Optional file paths
 path_file_trans: null # file path to transitions file
