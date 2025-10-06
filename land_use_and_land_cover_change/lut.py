@@ -46,6 +46,10 @@ class LUT:
                 self.reg = coords["Germany"]
             elif self.region == 'WestAfrica':
                 self.reg = coords["WestAfrica"]
+        if self.coords_lc_in:
+            self.reg_lc = self.coords_lc_in
+        else:
+            self.reg_lc = self.reg
 
         self.pfts_grass = GRAPFTS[0:self.nr_grass]
         self.pfts_crops = CROPFTS[0:self.nr_crops]
@@ -958,34 +962,16 @@ class LUT:
         """
         Prepare the PFTS data for the given grid
         """
-        if self.grid == "reg025_Europe":
-            ext="NINT"
-            remap_com="invertlat"
-            cutting=''
-        else:
-            if self.remap == "bilinear":
-                ext="BIL"
-                remap_com=f"remapbil"
-                if self.grid == "EUR-011":
-                    cutting = "-selindexbox,2,434,2,434"
-                else:
-                    cutting = ""
-            elif self.remap == "con2":
-                ext = "CON2"
-                remap_com = f"remapcon2"
-                if self.grid == 'EUR-011':
-                    cutting = "-selindexbox,2,434,2,434"
-                else:
-                    cutting = ''
         # prepare PFTS
         print_section_heading(f"Selecting variables for PFTS")
         input_file = self.namelist["F_LC_IN"]
         ds = xr.open_dataset(input_file)
         var8 = True if "var801" in ds.variables else False
         if var8:
-            cdo.sellonlatbox(self.reg, input=f"-selvar,{vars_pfts} {input_file}", output=f"{self.namelist['F_LC_IN_REG'].replace('.nc','_tmp.nc')}")
+            cdo.sellonlatbox(self.reg_lc, input=f"-selvar,{vars_pfts} {input_file}", output=f"{self.namelist['F_LC_IN_REG'].replace('.nc','_tmp.nc')}")
         else:
-            cdo.sellonlatbox(self.reg, input=f"-selvar,{self.pfts_file_var} {input_file}", output=f"{self.namelist['F_LC_IN_REG'].replace('.nc','_tmp.nc')}")
+            cdo.sellonlatbox(self.reg_lc, input=f"-selvar,{self.pfts_file_var} {input_file}", output=f"{self.namelist['F_LC_IN_REG'].replace('.nc','_tmp.nc')}")
+
 
     def func_prepare_pfts_file(self):
         """
