@@ -47,8 +47,9 @@ def main():
 
     # Load configuration from /config/
     print("Loading configuration...")
+    config: Any = load_configuration("main.yaml")
     # config: Any = load_configuration("LANDMATE_testdata-backward.yaml")
-    config: Any = load_configuration("LANDMATE_testdata-forward-rcp70.yaml")
+    # config: Any = load_configuration("LANDMATE_testdata-forward-rcp70.yaml")
 
     # LANDMATE, global, 10km, historical and future scenarios CMIP6: AIM-ssp370, IMAGE-ssp126, MAGPIE-ssp585, MESSAGE-ssp245.
     # config: Any = load_configuration("LANDMATE_PFT_v1.2_global_0.1deg_2015-hist.yaml")  # historical

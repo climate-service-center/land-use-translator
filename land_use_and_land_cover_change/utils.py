@@ -59,3 +59,16 @@ def get_git_info_str(repo_path=None):
     git_info_str += f"Current land-use-translator git commit: {git_info['lut']['commit']}\n"
 
     return git_info_str
+
+
+def get_repo_root() -> str:
+    """
+    Return the absolute path to the repository root.
+    """
+    # land-use-translator repository
+    # use the path of the current file to get the path to the repository root
+    repo_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    lut_repo = git.Repo(path=repo_path, search_parent_directories=True)
+
+    # Return the root from the repository
+    return lut_repo.working_tree_dir

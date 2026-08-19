@@ -3,11 +3,19 @@ configuration file specifying general settings the land-use translator runs with
 """
 
 import os
+from os import path
 
 import numpy as np
-from utils import create_backgr_vars
+from utils import create_backgr_vars, get_repo_root
 
-datadir = os.path.join(os.path.expandvars("${LUT_DATA_DIR}"), "data")
+# check if the environment variable LUT_DATA_DIR is set, if not, use the default path,
+# which is repo_root/land_use_and_land_cover_change/data
+if "LUT_DATA_DIR" not in os.environ:
+    print("LUT expects the data to be located under the path given by the environment variable $LUT_DATA_DIR. Since it is not set, use default path: lut_repo_root/land_use_and_land_cover_change/data.")
+    os.environ["LUT_DATA_DIR"] = path.join(get_repo_root(), "land_use_and_land_cover_change/data")
+
+# set necessary path variables relative to LUT_DATA_DIR
+datadir = os.path.expandvars("${LUT_DATA_DIR}")
 lut_output_dir = os.path.join(os.path.expandvars("${LUT_DATA_DIR}"), "output")
 pftdir = f"{datadir}/ESA-CCI"  # directory of ESA_CCI LC file
 odir = f"{lut_output_dir}/LUCAS_LUC"  # directory that stores original GLOBCOVER files

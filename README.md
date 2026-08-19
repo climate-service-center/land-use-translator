@@ -7,7 +7,7 @@ This Python program generates high-resolution land use and land cover (LULC) dat
 
 ## Installation Guide
 
-1. **Change to the project directory**:
+1. **After cloning the repository, change to the project directory**:
 
    ```bash
    cd project_name
@@ -19,7 +19,7 @@ This Python program generates high-resolution land use and land cover (LULC) dat
 
 3. **Activate your environment**:
    ```bash
-   conda activate land_use_translator_env
+   conda activate lut
 
 ## Quick start (Example historical scenario 1950-2015 for Germany)
 
@@ -44,15 +44,15 @@ To get started with this project, follow these steps:
     "https://zenodo.org/records/14981619/files/URBB_reg01_Global.nc" \
     "https://zenodo.org/records/14981619/files/PFTS_reg01.nc"
    ```
-These files will be downloaded and save in `data` directory.
+These files will be downloaded and saved in `data` directory.
 
 3. **Run the program from the project directory:**
 
 ```bash
-python3 main.py
+python main.py
 ```
 
-5. **Output file:** The generated output file will be located in the  `data/LUCAS_LUC/` directory. This output file contains the Plant Functional Type (PFT) fraction for the 14 PFTs and two non-vegetated land cover classes across the selected region, scenario, and timeline.
+4. **Output file:** The generated output file will be located in the  `land_use_and_land_cover_change/data/output/LUCAS_LUC/` directory. This output file contains the Plant Functional Type (PFT) fraction for the 14 PFTs and two non-vegetated land cover classes across the selected region, scenario, and timeline.
 
 ## Dataset Requirements
 

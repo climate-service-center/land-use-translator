@@ -110,6 +110,10 @@ class LUT:
                 self.reg = coords["Global"]
             elif self.region == "WestAfrica":
                 self.reg = coords["WestAfrica"]
+        if self.coords_lc_in:
+            self.reg_lc = self.coords_lc_in
+        else:
+            self.reg_lc = self.reg
 
         self.pfts_grass = GRAPFTS[0 : self.nr_grass]
         self.pfts_crops = CROPFTS[0 : self.nr_crops]

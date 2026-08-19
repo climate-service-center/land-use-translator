@@ -66,6 +66,7 @@ schema = {
     "path_file_backcro": {"type": "string", "nullable": True},
     "path_file_lsm": {"type": "string", "nullable": True},
     "coords": {"type": "string", "nullable": True},
+    "coords_lc_in": {"type": "string", "nullable": True},
 }
 
 
@@ -97,13 +98,14 @@ def validate_config(config) -> None:
             raise ValueError("Mcgrath year (mcgrath_eyear) must be equal or smaller than ending year (eyear)")
         if config.mcgrath_eyear < config.syear:
             raise ValueError("Mcgrath year (mcgrath_eyear) must be equal or bigger than starting year (syear)")
-    if config.coords:
-        if len(config.coords.split(",")) != 4:
-            raise ValueError("Coordinates must given as 4 values (lonmin,lonmax,latmin,latmax) separated by commas")
-        try:
-            [float(config.coords.split(",")[i]) for i in range(4)]
-        except ValueError:
-            raise ValueError("Coordinates must be given as float values")
+    for crds in [config.coords, config.coords_lc_in]:
+        if crds:
+            if len(crds.split(",")) != 4:
+                raise ValueError("Coordinates must given as 4 values (lonmin,lonmax,latmin,latmax) separated by commas")
+            try:
+                [float(crds.split(",")[i]) for i in range(4)]
+            except ValueError:
+                raise ValueError("Coordinates must be given as float values")
     if not isinstance(config.n_jobs, int) or config.n_jobs < -1 or config.n_jobs == 0:
         raise ValueError(
             "Number of jobs (n_jobs) must be an integer greater than or equal to -1 and different from 0. The number -1 means using all available cores, 1 means using a single core, and any positive integer specifies the number of cores to use."
