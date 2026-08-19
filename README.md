@@ -18,6 +18,7 @@ This Python program generates high-resolution land use and land cover (LULC) dat
    conda env create -f environment.yml 
 
 3. **Activate your environment**:
+
    ```bash
    conda activate lut
 
